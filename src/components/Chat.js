@@ -11,9 +11,14 @@ const Chat = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get('/api/chat/messages'); // Adjust the endpoint based on your backend
-        setMessages(response.data);
+        // Ensure the response data is an array
+        if (Array.isArray(response.data)) {
+          setMessages(response.data);
+        } else {
+          console.error('Expected an array but got:', response.data);
+        }
       } catch (error) {
-        console.error(error);
+        console.error('Failed to fetch messages:', error);
       }
     };
 
@@ -24,10 +29,11 @@ const Chat = () => {
     if (input.trim()) {
       try {
         const response = await axios.post('/api/chat/send', { message: input }); // Adjust the endpoint based on your backend
-        setMessages([...messages, response.data]);
+        // Add the new message to the messages array
+        setMessages((prevMessages) => [...prevMessages, response.data]);
         setInput('');
       } catch (error) {
-        console.error(error);
+        console.error('Failed to send message:', error);
       }
     }
   };
