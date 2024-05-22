@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, TextField, Button, Typography } from '@mui/material';
+import { Container, TextField, Button, Typography, Box } from '@mui/material';
 
-const WhatsAppConnect = () => {
+const Connection = ({ service, endpoint }) => {
   const [accountId, setAccountId] = useState('');
   const [token, setToken] = useState('');
 
   const handleConnect = async () => {
     try {
-      await axios.post('/api/whatsapp/connect', { accountId, token }); // Adjust the endpoint based on your backend
-      alert('WhatsApp Business account connected successfully');
+      await axios.post(endpoint, { accountId, token }); // Adjust the endpoint based on your backend
+      alert(`${service} account connected successfully`);
     } catch (error) {
-      console.error(error);
+      console.error(`Failed to connect to ${service}:`, error);
+      alert(`Failed to connect to ${service}`);
     }
   };
 
   return (
-    <Container>
-      <Typography variant="h5">Connect WhatsApp Business Account</Typography>
+    <Container sx={{ marginBottom: 4 }}>
+      <Typography variant="h5">{`Connect ${service} Account`}</Typography>
       <TextField
         label="Account ID"
         value={accountId}
@@ -39,4 +40,4 @@ const WhatsAppConnect = () => {
   );
 };
 
-export default WhatsAppConnect;
+export default Connection;

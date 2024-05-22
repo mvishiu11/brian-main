@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Register from './components/Register';
+import AboutPage from './components/About';
 import ProtectedRoute from './ProtectedRoute';
 
 function App() {
@@ -31,9 +32,10 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={
+        <Route path="/dashboard/*" element={
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>

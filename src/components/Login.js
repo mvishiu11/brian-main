@@ -14,10 +14,8 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast.success('Logged in successfully');
       navigate('/dashboard');
     } catch (error) {
-      toast.error('Failed to log in');
       console.error(error);
     }
   };

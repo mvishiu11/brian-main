@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, TextField, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Container, TextField, Button, List, ListItem, ListItemText, Typography, Paper, Box } from '@mui/material';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
   useEffect(() => {
-    // Load initial messages if needed
     const fetchMessages = async () => {
       try {
         const response = await axios.get('/api/chat/messages'); // Adjust the endpoint based on your backend
-        // Ensure the response data is an array
         if (Array.isArray(response.data)) {
           setMessages(response.data);
         } else {
@@ -39,24 +37,44 @@ const Chat = () => {
   };
 
   return (
-    <Container>
-      <Typography variant="h5">Chat with GPT</Typography>
-      <List>
-        {messages.map((msg, index) => (
-          <ListItem key={index}>
-            <ListItemText primary={msg.text} secondary={msg.sender} />
-          </ListItem>
-        ))}
-      </List>
-      <TextField
-        label="Type a message"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        fullWidth
-      />
-      <Button variant="contained" color="primary" onClick={handleSendMessage}>
-        Send
-      </Button>
+    <Container maxWidth="md">
+      <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', margin: 2 }}>
+        Chat with GPT
+      </Typography>
+      <Paper sx={{ padding: 3, marginBottom: 3 }}>
+        <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
+          {messages.map((msg, index) => (
+            <ListItem key={index} sx={{ justifyContent: msg.sender === 'GPT' ? 'flex-start' : 'flex-end' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: msg.sender === 'GPT' ? 'flex-start' : 'flex-end' }}>
+                <ListItemText
+                  primary={msg.text}
+                  secondary={msg.sender}
+                  sx={{
+                    backgroundColor: msg.sender === 'GPT' ? '#f1f1f1' : '#1976d2',
+                    color: msg.sender === 'GPT' ? 'black' : 'white',
+                    borderRadius: 1,
+                    padding: 1,
+                    maxWidth: '80%',
+                    wordBreak: 'break-word',
+                  }}
+                />
+              </Box>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <TextField
+          label="Type a message"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          fullWidth
+          sx={{ marginRight: 2 }}
+        />
+        <Button variant="contained" color="primary" onClick={handleSendMessage}>
+          Send
+        </Button>
+      </Box>
     </Container>
   );
 };
